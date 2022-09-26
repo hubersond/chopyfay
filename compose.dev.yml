@@ -1,0 +1,15 @@
+version: "3.1"
+services:
+    app:
+        build:
+            context: .
+            args:
+                SHOPIFY_API_KEY: 4ca6386fc80c94a7ff547ff8d6dcc999
+        container_name: chopy-fay-app
+        working_dir: /app
+        volumes:
+            - ./web/nginx.conf:/etc/nginx/nginx.conf
+            - ./web:/app
+            # - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.4/fpm/conf.d/99-overrides.ini
+        ports:
+            - "8888:80"

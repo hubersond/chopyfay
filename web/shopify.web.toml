@@ -1,0 +1,6 @@
+type="backend"
+
+[commands]
+dev = "php -v"
+# dev = "php artisan serve"
+build = "cp -r frontend/dist/* public"
