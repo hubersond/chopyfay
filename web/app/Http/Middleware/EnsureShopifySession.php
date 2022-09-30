@@ -9,6 +9,7 @@ use App\Lib\TopLevelRedirection;
 use Closure;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 use Shopify\Clients\Graphql;
 use Shopify\Context;
@@ -73,11 +74,12 @@ class EnsureShopifySession
                     $proceed = false;
                 }
             } else {
-                // Make a request to ensure the access token is still valid. Otherwise, re-authenticate the user.
+                // Make a request to ensure the access token is still valid.
+                // Otherwise, re-authenticate the user.
                 $client = new Graphql($session->getShop(), $session->getAccessToken());
                 $response = $client->query(self::TEST_GRAPHQL_QUERY);
 
-                $proceed = $response->getStatusCode() === 200;
+                $proceed = $response->getStatusCode() === Response::HTTP_OK;
             }
 
             if ($proceed) {

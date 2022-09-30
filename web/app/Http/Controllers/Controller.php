@@ -27,6 +27,8 @@ class Controller extends BaseController
             'app_name' => 'Chop Y Fay',
             'app_env' => App::environment(),
             'shopify' => config('shopify.app_url'),
+            'shopify_app_emb' => Context::$IS_EMBEDDED_APP,
+            'shopify_app_host' => Context::$HOST_NAME,
             'foo' => base64_decode('Y2hvcC15LWZheS5teXNob3BpZnkuY29tL2FkbWlu'),
         ];
 
@@ -36,10 +38,16 @@ class Controller extends BaseController
     <<<DEV>>
     */
 
-
-    public function index(Request $request)
+    /**
+     * Fallback route handler
+     *
+     * @param Request $request
+     *
+     * @return void
+     */
+    public function fallback(Request $request)
     {
-        if (Context::$IS_EMBEDDED_APP &&  $request->query("embedded", false) === "1") {
+        if (Context::$IS_EMBEDDED_APP &&  $request->query('embedded', false) === '1') {
             if (env('APP_ENV') === 'production') {
                 return file_get_contents(public_path('index.html'));
 
@@ -48,7 +56,7 @@ class Controller extends BaseController
             }
 
         } else {
-            return redirect(Utils::getEmbeddedAppUrl($request->query("host", null)) . "/" . $request->path());
+            return redirect(Utils::getEmbeddedAppUrl($request->query('host')) . '/' . $request->path());
         }
     }
 }

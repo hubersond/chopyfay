@@ -17,15 +17,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/api/auth/callback', [AuthController::class, 'callback']);
-
 Route::get('/api/auth', [AuthController::class, 'auth']);
+
+Route::get('/api/auth/callback', [AuthController::class, 'callback']);
 
 Route::post('/api/webhooks', [WebhookController::class, 'index']);
 
 Route::middleware(['shopify.auth'])->group(function() {
+    Route::get('/api/products', [ProductController::class, 'all']);
     Route::get('/api/products/count', [ProductController::class, 'count']);
     Route::get('/api/products/create', [ProductController::class, 'create']);
+    Route::post('/api/rest/products/create', [ProductController::class, 'createRest']);
 });
 
-Route::fallback([Controller::class, 'index'])->middleware('shopify.installed');
+Route::fallback([Controller::class, 'fallback'])->middleware('shopify.installed');

@@ -7,7 +7,7 @@ import {
     TextContainer,
 } from "@shopify/polaris";
 
-import { trophyImage } from "../assets";
+import { trophyImage } from "../../assets";
 
 export function AppBanner() {
 

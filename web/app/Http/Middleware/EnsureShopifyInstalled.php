@@ -15,15 +15,21 @@ class EnsureShopifyInstalled
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
+     *
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {
-        $shop = $request->query('shop') ? Utils::sanitizeShopDomain($request->query('shop')) : null;
-
-        $appInstalled = $shop && Session::where('shop', $shop)->where('access_token', '<>', null)->exists();
+        $shop = $request->query('shop')
+            ? Utils::sanitizeShopDomain($request->query('shop'))
+            : null;
+        $appInstalled = $shop && Session::where('shop', $shop)
+            ->where('access_token', '<>', null)
+            ->exists();
         $isExitingIframe = preg_match("/^ExitIframe/i", $request->path());
 
-        return ($appInstalled || $isExitingIframe) ? $next($request) : AuthRedirection::redirect($request);
+        return ($appInstalled || $isExitingIframe)
+            ? $next($request)
+            : AuthRedirection::redirect($request);
     }
 }

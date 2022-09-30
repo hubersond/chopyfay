@@ -11,6 +11,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
 use Shopify\Auth\Session as AuthSession;
 use Shopify\Clients\Rest as Client;
+use Shopify\Rest\Admin2022_07\Product;
 
 class ProductController extends Controller
 {
@@ -56,6 +57,23 @@ class ProductController extends Controller
         }
     }
 
+    public function createRest(Request $request)
+    {
+        /** @var AuthSession */
+        $session = $request->get('shopifySession');
+        $product = new Product($session);
+
+        $product->title = $request->get('title');
+        $product->body_html = $request->get('description');
+        $product->images = [
+            [ 'src' => $request->get('image'), ],
+        ];
+
+        $product->save(true);
+
+        return response()->json($product->toArray());
+    }
+
     /**
      * Counts shop products
      *
@@ -74,5 +92,24 @@ class ProductController extends Controller
 
         return response()->json($response);
         // return response()->json(['type' => gettype($response), 'count' => 8 ]);
+    }
+
+    /**
+     * Returns all shop products
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function all(Request $request): JsonResponse
+    {
+        // Provided by the shopify.auth middleware, guaranteed to be active
+        /** @var AuthSession */
+        $session = $request->get('shopifySession');
+
+        $client = new Client($session->getShop(), $session->getAccessToken());
+        $response = $client->get('products')->getDecodedBody();
+
+        return response()->json($response);
     }
 }

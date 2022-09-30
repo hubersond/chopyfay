@@ -1,3 +1,3 @@
-export { AppBanner } from "./AppBanner";
-export { ProductsCard } from "./ProductsCard";
+export { AppBanner } from "./layouts/AppBanner";
+export { ProductsCard } from "./products/ProductsCard";
 export * from "./providers";

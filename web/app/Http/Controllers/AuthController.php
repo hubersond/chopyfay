@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Lib\AuthRedirection;
+use App\Lib\CookieHandler;
 use App\Lib\EnsureBilling;
 use App\Models\Session;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -55,7 +56,7 @@ class AuthController extends Controller
         $session = OAuth::callback(
             $request->cookie(),
             $request->query(),
-            ['App\Lib\CookieHandler', 'saveShopifyCookie'],
+            [ CookieHandler::class, 'saveShopifyCookie' ],
         );
         $shop = Utils::sanitizeShopDomain($request->query('shop'));
 
