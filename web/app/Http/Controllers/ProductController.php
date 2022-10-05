@@ -63,10 +63,10 @@ class ProductController extends Controller
         $session = $request->get('shopifySession');
         $product = new Product($session);
 
-        $product->title = $request->get('title');
-        $product->body_html = $request->get('description');
+        $product->title = $request->json('title');
+        $product->body_html = $request->json('description');
         $product->images = [
-            [ 'src' => $request->get('image'), ],
+            [ 'src' => $request->json('image'), ],
         ];
 
         $product->save(true);
